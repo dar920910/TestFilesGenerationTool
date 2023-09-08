@@ -1,0 +1,1 @@
+﻿TestFilesGenerator.Library.AppService.Launch();

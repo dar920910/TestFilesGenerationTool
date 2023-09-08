@@ -1,0 +1,6 @@
+﻿<?xml version="1.0"?>
+<ArrayOfMediaCollection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <MediaCollection Alias="Demo1" SourceMediaFile=".\src\TEST1.mxf" CountOfIDs="10" RandomMode="false"/>
+  <MediaCollection Alias="Demo2" SourceMediaFile=".\src\TEST2.mxf" CountOfIDs="20" RandomMode="false"/>
+  <MediaCollection Alias="Demo3" SourceMediaFile=".\src\TEST3.mxf" CountOfIDs="30" RandomMode="false"/>
+</ArrayOfMediaCollection>
