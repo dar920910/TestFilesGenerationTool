@@ -32,5 +32,8 @@ public class MediaBase
         return media;
     }
 
-    private string GetMediaBaseConfigByDefault() => @".\mediabase.xml";
+    private string GetMediaBaseConfigByDefault()
+    {
+        return Path.Combine(Directory.GetCurrentDirectory(), "mediabase.xml");
+    }
 }
