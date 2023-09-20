@@ -1,3 +1,4 @@
+using System.Runtime.InteropServices;
 using static System.Console;
 
 namespace TestFilesGenerator.Library;
@@ -94,8 +95,13 @@ public static class FileDriveManager
 
     public static long GetFreeDiskSpaceOnStorage(CustomFileObject targetFileObject)
     {
-        string storage = RetrieveDiskName(targetFileObject).ToString() + ":\\";
-        return new DriveInfo(storage).AvailableFreeSpace;
+        if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+        {
+            string storage = RetrieveDiskName(targetFileObject).ToString() + ":\\";
+            return new DriveInfo(storage).AvailableFreeSpace;
+        }
+
+        return new DriveInfo(OutputDirectory).AvailableFreeSpace;
     }
 
     private static char RetrieveDiskName(CustomFileObject targetFileObject)
