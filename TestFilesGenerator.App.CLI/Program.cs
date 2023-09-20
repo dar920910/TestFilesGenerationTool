@@ -6,7 +6,7 @@ const string appName = "TestFilesGenerator.App.CLI";
 
 BeginRunning(appName);
 
-MediaStorage.InitializeOutputStorage();
+FileDriveManager.InitializeOutputStorage();
 
 MediaBase userFileStorage = new();
 List<MediaObject> userFileObjects = new();
@@ -67,7 +67,7 @@ bool IsRightUserInput(ConsoleKeyInfo keyInfo)
 
     if (answerYes)
     {
-        MediaStorage.CleanBusyDiskSpace();
+        FileDriveManager.CleanBusyDiskSpace();
         return true;
     }
 

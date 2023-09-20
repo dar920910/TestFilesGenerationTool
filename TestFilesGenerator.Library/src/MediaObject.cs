@@ -1,5 +1,4 @@
 using static System.Console;
-using static TestFilesGenerator.Library.MediaStorage;
 
 namespace TestFilesGenerator.Library;
 
@@ -24,7 +23,7 @@ public class MediaObject
     public void Clone()
     {
         CreateMediaObjectCopy();
-        ShowStorageStatus();
+        FileDriveManager.ShowStorageStatus();
     }
 
     private void CreateMediaObjectCopy()
@@ -33,12 +32,12 @@ public class MediaObject
         string targetMediaFile = TargetMediaFileInfo.FullName;
         string targetMediaName = TargetMediaFileInfo.Name;
 
-        if (CanCreateNewID(this))
+        if (FileDriveManager.CanCreateNewID(this))
         {
             File.Copy(sourceMediaFile, targetMediaFile, true);
 
-            MediaFilesList.Add(targetMediaFile);
-            TotalSizeOfIDs += TargetMediaFileInfo.Length;
+            FileDriveManager.CurrentFileObjects.Add(targetMediaFile);
+            FileDriveManager.TotalSizeOfIDs += TargetMediaFileInfo.Length;
 
             OutCloningResult(targetMediaName);
         }
@@ -52,7 +51,7 @@ public class MediaObject
     {
         WriteLine("{0}\n", GeneratorService.BuildSeparator());
         WriteLine($"   [{DateTimeService.GetDateAndTimeDefaultString()}]: {idName}\n");
-        WriteLine("   [!] Available Space: {0} bytes.", GetFreeDiskSpaceOnStorage(this));
+        WriteLine("   [!] Available Space: {0} bytes.", FileDriveManager.GetFreeDiskSpaceOnStorage(this));
     }
 
     private void OutCloningError(string idName)

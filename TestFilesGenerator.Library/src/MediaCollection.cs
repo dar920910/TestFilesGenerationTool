@@ -97,7 +97,7 @@ public class MediaCollection
 
     private string GetOutputDirectory()
     {
-        string outputDirectory = $"{MediaStorage.OutputDirectory}{Alias}\\";
+        string outputDirectory = $"{FileDriveManager.OutputDirectory}{Alias}\\";
 
         if (!Directory.Exists(outputDirectory))
         {

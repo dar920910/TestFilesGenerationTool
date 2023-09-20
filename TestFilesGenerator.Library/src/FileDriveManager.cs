@@ -2,16 +2,16 @@ using static System.Console;
 
 namespace TestFilesGenerator.Library;
 
-public static class MediaStorage
+public static class FileDriveManager
 {
-    public static List<string> MediaFilesList { get; set; }
+    public static List<string> CurrentFileObjects { get; set; }
     public static long TotalSizeOfIDs { get; set; }
     public static string OutputDirectory { get; }
 
-    static MediaStorage()
+    static FileDriveManager()
     {
         OutputDirectory = GetCommonOutputDirectory();
-        MediaFilesList = new List<string>();
+        CurrentFileObjects = new List<string>();
         TotalSizeOfIDs = 0;
     }
 
@@ -35,7 +35,7 @@ public static class MediaStorage
     {
         WriteLine();
         WriteLine("   [?] Total Size of IDs : {0} bytes.", TotalSizeOfIDs);
-        WriteLine("   [?] Total Count of IDs : {0} files.", MediaFilesList.Count);
+        WriteLine("   [?] Total Count of IDs : {0} files.", CurrentFileObjects.Count);
         WriteLine();
     }
 
@@ -45,7 +45,7 @@ public static class MediaStorage
 
         WriteLine("\n\n   >>> Cleaning ...\n\n");
 
-        foreach (var mediaFile in MediaStorage.MediaFilesList)
+        foreach (var mediaFile in CurrentFileObjects)
         {
             try
             {
@@ -69,7 +69,7 @@ public static class MediaStorage
             }
         }
 
-        WriteLine("\n\n   [SUCCESS]: There were deleted {0} files from {1}.\n", countOfDeletedIDs, MediaFilesList.Count);
+        WriteLine("\n\n   [SUCCESS]: There were deleted {0} files from {1}.\n", countOfDeletedIDs, CurrentFileObjects.Count);
     }
 
     public static bool CanCreateNewID(MediaObject targetMediaFile)
@@ -91,7 +91,7 @@ public static class MediaStorage
     public static long GetFreeDiskSpaceOnStorage(MediaObject targetMediaFile)
     {
         string storage = RetrieveDiskName(targetMediaFile).ToString() + ":\\";
-        return (new DriveInfo(storage)).AvailableFreeSpace;
+        return new DriveInfo(storage).AvailableFreeSpace;
     }
 
     private static char RetrieveDiskName(MediaObject targetMediaFile)
