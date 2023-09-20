@@ -2,12 +2,12 @@ using static System.Console;
 
 namespace TestFilesGenerator.Library;
 
-public class MediaObject
+public class CustomFileObject
 {
     public FileInfo SourceMediaFileInfo { get; }
     public FileInfo TargetMediaFileInfo { get; }
 
-    public MediaObject(string mediaPath, string mediaSource)
+    public CustomFileObject(string mediaPath, string mediaSource)
     {
         try
         {

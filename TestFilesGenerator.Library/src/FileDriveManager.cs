@@ -72,7 +72,7 @@ public static class FileDriveManager
         WriteLine("\n\n   [SUCCESS]: There were deleted {0} files from {1}.\n", countOfDeletedIDs, CurrentFileObjects.Count);
     }
 
-    public static bool CanCreateNewID(MediaObject targetMediaFile)
+    public static bool CanCreateNewID(CustomFileObject targetMediaFile)
     {
         long availableDiskSpace = GetFreeDiskSpaceOnStorage(targetMediaFile);
         long potentialTotalSize = TotalSizeOfIDs + targetMediaFile.SourceMediaFileInfo.Length;
@@ -88,13 +88,13 @@ public static class FileDriveManager
         return false;
     }
 
-    public static long GetFreeDiskSpaceOnStorage(MediaObject targetMediaFile)
+    public static long GetFreeDiskSpaceOnStorage(CustomFileObject targetMediaFile)
     {
         string storage = RetrieveDiskName(targetMediaFile).ToString() + ":\\";
         return new DriveInfo(storage).AvailableFreeSpace;
     }
 
-    private static char RetrieveDiskName(MediaObject targetMediaFile)
+    private static char RetrieveDiskName(CustomFileObject targetMediaFile)
     {
         return targetMediaFile.TargetMediaFileInfo.FullName[0];
     }

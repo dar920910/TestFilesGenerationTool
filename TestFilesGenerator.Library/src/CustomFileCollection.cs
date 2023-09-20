@@ -44,10 +44,10 @@ public class CustomFileCollection
         WriteLine();
     }
 
-    public List<MediaObject> RetrieveMediaObjects()
+    public List<CustomFileObject> RetrieveMediaObjects()
     {
-        var mediaObjects = new List<MediaObject>();
-        MediaObject[] arrayOfMediaObjects = GenerateMediaObjects();
+        var mediaObjects = new List<CustomFileObject>();
+        CustomFileObject[] arrayOfMediaObjects = GenerateMediaObjects();
 
         foreach (var mediaObject in arrayOfMediaObjects)
         {
@@ -57,15 +57,15 @@ public class CustomFileCollection
         return mediaObjects;
     }
 
-    private MediaObject[] GenerateMediaObjects()
+    private CustomFileObject[] GenerateMediaObjects()
     {
-        var arrayOfMediaObjects = new MediaObject[CountOfObjects];
+        var arrayOfMediaObjects = new CustomFileObject[CountOfObjects];
 
         for (uint idCounter = 0; idCounter < arrayOfMediaObjects.Length; idCounter++)
         {
             string mediaName = IsRandom ? GenerateRandomIdName() : GenerateCustomIdName(idCounter + 1);
             string mediaPath = GenerateTargetIdPath(mediaName);
-            arrayOfMediaObjects[idCounter] = new MediaObject(mediaPath, SourceMediaFile);
+            arrayOfMediaObjects[idCounter] = new CustomFileObject(mediaPath, SourceMediaFile);
         }
 
         return arrayOfMediaObjects;
@@ -73,24 +73,24 @@ public class CustomFileCollection
 
     private string GenerateTargetIdPath(string targetIdName)
     {
-        return ( GetOutputDirectory() + targetIdName );
+        return GetOutputDirectory() + targetIdName;
     }
 
     private string GenerateCustomIdName(uint idNumber)
     {
-        return ( Alias + "_" + GeneratorService.GetIdNumber(idNumber) + GetMediaFileExtensionFromSource() );
+        return Alias + "_" + GeneratorService.GetIdNumber(idNumber) + GetMediaFileExtensionFromSource();
     }
 
     private string GenerateRandomIdName()
     {
         // Nexio ID can be consisting from 32 characters.
         // I set the rule that the name has 16 lower and 16 upper case letters.
-        return ( (new RandomFileName(16, 16)).Generate() + GetMediaFileExtensionFromSource() );
+        return new RandomFileName(16, 16).Generate() + GetMediaFileExtensionFromSource();
     }
 
     private string GetMediaFileExtensionFromSource()
     {
-        return (new FileInfo(SourceMediaFile)).Extension;
+        return new FileInfo(SourceMediaFile).Extension;
     }
 
     private string GetAliasByDefault() => "MEDIA";

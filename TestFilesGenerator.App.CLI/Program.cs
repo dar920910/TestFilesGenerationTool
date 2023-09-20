@@ -9,11 +9,11 @@ BeginRunning(appName);
 FileDriveManager.InitializeOutputStorage();
 
 CustomFileStorage userFileStorage = new();
-List<MediaObject> userFileObjects = new();
+List<CustomFileObject> userFileObjects = new();
 
 foreach (var fileCollection in userFileStorage.MediaCollections)
 {
-    List<MediaObject> collectionFileObjects = fileCollection.RetrieveMediaObjects();
+    List<CustomFileObject> collectionFileObjects = fileCollection.RetrieveMediaObjects();
 
     foreach (var fileObject in collectionFileObjects)
     {
