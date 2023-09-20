@@ -73,7 +73,7 @@ public class CustomFileCollection
 
     private string GenerateTargetIdPath(string targetIdName)
     {
-        return GetOutputDirectory() + targetIdName;
+        return Path.Combine(GetOutputDirectory(), targetIdName);
     }
 
     private string GenerateCustomIdName(uint idNumber)
@@ -95,7 +95,7 @@ public class CustomFileCollection
 
     private string GetOutputDirectory()
     {
-        string outputDirectory = $"{FileDriveManager.OutputDirectory}{Alias}\\";
+        string outputDirectory = Path.Combine(FileDriveManager.OutputDirectory, Alias);
 
         if (!Directory.Exists(outputDirectory))
         {

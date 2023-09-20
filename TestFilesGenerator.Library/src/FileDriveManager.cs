@@ -6,26 +6,29 @@ public static class FileDriveManager
 {
     public static List<string> CurrentFileObjects { get; set; }
     public static long TotalSizeOfIDs { get; set; }
-    public static string OutputDirectory { get; }
+    public static readonly string OutputDirectory;
 
     static FileDriveManager()
     {
-        OutputDirectory = GetCommonOutputDirectory();
+        OutputDirectory = Path.Combine(Directory.GetCurrentDirectory(), "out");
+
+        if (!Directory.Exists(OutputDirectory))
+        {
+            Directory.CreateDirectory(OutputDirectory);
+        }
+
         CurrentFileObjects = new List<string>();
         TotalSizeOfIDs = 0;
     }
 
     public static void InitializeOutputStorage()
     {
-        WriteLine("   >>> Initializing the output storage for IDs ...");
-        WriteLine();
+        WriteLine("   >>> Initializing the output storage for IDs ...\n");
 
-        string[] oldCollections = Directory.GetDirectories(OutputDirectory);
-
-        foreach (var oldCollection in oldCollections)
+        if (Directory.GetDirectories(OutputDirectory).Length > 0)
         {
-            WriteLine("   >-\\-> \"{0}\" was deleted with its content.", oldCollection);
-            Directory.Delete(oldCollection, true);
+            Directory.Delete(path: OutputDirectory, recursive: true);
+            WriteLine($"   >-\\-> Deleted all existing content from the output directory '{OutputDirectory}'.");
         }
 
         WriteLine();
@@ -70,6 +73,7 @@ public static class FileDriveManager
         }
 
         WriteLine("\n\n   [SUCCESS]: There were deleted {0} files from {1}.\n", countOfDeletedIDs, CurrentFileObjects.Count);
+        Directory.Delete(path: OutputDirectory, recursive: true);
     }
 
     public static bool CanCreateNewID(CustomFileObject targetFileObject)
@@ -97,17 +101,5 @@ public static class FileDriveManager
     private static char RetrieveDiskName(CustomFileObject targetFileObject)
     {
         return targetFileObject.TargetFileInfo.FullName[0];
-    }
-
-    private static string GetCommonOutputDirectory()
-    {
-        string outputDirectory = @".\out\";
-
-        if (!Directory.Exists(outputDirectory))
-        {
-            Directory.CreateDirectory(outputDirectory);
-        }
-
-        return outputDirectory;
     }
 }
