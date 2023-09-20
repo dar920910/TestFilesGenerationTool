@@ -5,7 +5,7 @@ namespace TestFilesGenerator.Library;
 public class CustomFileStorage
 {
     private readonly string mediabaseConfiguration;
-    public List<MediaCollection> MediaCollections { get; }
+    public List<CustomFileCollection> MediaCollections { get; }
 
     public CustomFileStorage()
     {
@@ -13,14 +13,14 @@ public class CustomFileStorage
         MediaCollections = RetrieveListOfMediaCollections();
     }
 
-    private List<MediaCollection> RetrieveListOfMediaCollections()
+    private List<CustomFileCollection> RetrieveListOfMediaCollections()
     {
-        var media = new List<MediaCollection>();
-        var mediabaseSerializer = new XmlSerializer(typeof(List<MediaCollection>));
+        var media = new List<CustomFileCollection>();
+        var mediabaseSerializer = new XmlSerializer(typeof(List<CustomFileCollection>));
     
         using (FileStream mediabaseXmlConfig = File.Open(mediabaseConfiguration, FileMode.Open))
         {
-            media = (List<MediaCollection>)mediabaseSerializer.Deserialize(mediabaseXmlConfig);
+            media = (List<CustomFileCollection>)mediabaseSerializer.Deserialize(mediabaseXmlConfig);
         }
 
         return media;

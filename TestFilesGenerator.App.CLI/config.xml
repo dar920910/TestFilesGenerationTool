@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0"?>
-<ArrayOfMediaCollection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <MediaCollection Alias="demo1" SourceMediaFile=".\src\media1" CountOfIDs="10" RandomMode="false"/>
-  <MediaCollection Alias="demo2" SourceMediaFile=".\src\media2" CountOfIDs="20" RandomMode="false"/>
-  <MediaCollection Alias="demo3" SourceMediaFile=".\src\media3" CountOfIDs="30" RandomMode="false"/>
-</ArrayOfMediaCollection>
+<ArrayOfCustomFileCollection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <CustomFileCollection Alias="demo1" SourceMediaFile=".\src\media1" CountOfIDs="10" RandomMode="false"/>
+  <CustomFileCollection Alias="demo2" SourceMediaFile=".\src\media2" CountOfIDs="20" RandomMode="false"/>
+  <CustomFileCollection Alias="demo3" SourceMediaFile=".\src\media3" CountOfIDs="30" RandomMode="false"/>
+</ArrayOfCustomFileCollection>

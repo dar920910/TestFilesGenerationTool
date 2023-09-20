@@ -3,7 +3,7 @@ using static System.Console;
 
 namespace TestFilesGenerator.Library;
 
-public class MediaCollection
+public class CustomFileCollection
 {
     [XmlAttribute("Alias")]
     public string Alias { get; set; }
@@ -17,9 +17,9 @@ public class MediaCollection
     [XmlAttribute("RandomMode")]
     public bool IsRandom { get; set; }
 
-    public MediaCollection() { }
+    public CustomFileCollection() { }
 
-    public MediaCollection(string alias, string source, uint count)
+    public CustomFileCollection(string alias, string source, uint count)
     {
         Alias = alias;
         SourceMediaFile = source;
@@ -27,7 +27,7 @@ public class MediaCollection
         IsRandom = false;
     }
 
-    public MediaCollection(string alias, string source, uint count, bool isRandom)
+    public CustomFileCollection(string alias, string source, uint count, bool isRandom)
     {
         Alias = alias;
         SourceMediaFile = source;
@@ -37,7 +37,7 @@ public class MediaCollection
 
     public void Out()
     {
-        WriteLine($"\nMediaCollection: \"{Alias}\"\n");
+        WriteLine($"\nCustomFileCollection: \"{Alias}\"\n");
         WriteLine($"-> SourceMediaFile: \"{SourceMediaFile}\"");
         WriteLine($"-> CountOfObjects: \"{CountOfObjects}\"");
         WriteLine($"-> IsRandom: \"{IsRandom}\"");
