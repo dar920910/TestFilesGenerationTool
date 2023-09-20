@@ -8,7 +8,7 @@ BeginRunning(appName);
 
 FileDriveManager.InitializeOutputStorage();
 
-MediaBase userFileStorage = new();
+CustomFileStorage userFileStorage = new();
 List<MediaObject> userFileObjects = new();
 
 foreach (var fileCollection in userFileStorage.MediaCollections)

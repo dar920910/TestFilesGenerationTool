@@ -2,18 +2,12 @@ using System.Xml.Serialization;
 
 namespace TestFilesGenerator.Library;
 
-public class MediaBase
+public class CustomFileStorage
 {
     private readonly string mediabaseConfiguration;
     public List<MediaCollection> MediaCollections { get; }
 
-    public MediaBase()
-    {
-        mediabaseConfiguration = GetMediaBaseConfigByDefault();
-        MediaCollections = RetrieveListOfMediaCollections();
-    }
-
-    public MediaBase(string mediabaseConfigPath)
+    public CustomFileStorage()
     {
         mediabaseConfiguration = GetMediaBaseConfigByDefault();
         MediaCollections = RetrieveListOfMediaCollections();
@@ -34,6 +28,6 @@ public class MediaBase
 
     private string GetMediaBaseConfigByDefault()
     {
-        return Path.Combine(Directory.GetCurrentDirectory(), "mediabase.xml");
+        return Path.Combine(Directory.GetCurrentDirectory(), "config.xml");
     }
 }
