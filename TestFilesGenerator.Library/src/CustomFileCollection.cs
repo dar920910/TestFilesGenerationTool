@@ -8,8 +8,8 @@ public class CustomFileCollection
     [XmlAttribute("Alias")]
     public string Alias { get; set; }
 
-    [XmlAttribute("SourceMediaFile")]
-    public string SourceMediaFile { get; set; }
+    [XmlAttribute("SourceFileObject")]
+    public string SourceFileObject { get; set; }
 
     [XmlAttribute("CountOfIDs")]
     public uint CountOfObjects { get; set; }
@@ -22,7 +22,7 @@ public class CustomFileCollection
     public CustomFileCollection(string alias, string source, uint count)
     {
         Alias = alias;
-        SourceMediaFile = source;
+        SourceFileObject = source;
         CountOfObjects = count;
         IsRandom = false;
     }
@@ -30,7 +30,7 @@ public class CustomFileCollection
     public CustomFileCollection(string alias, string source, uint count, bool isRandom)
     {
         Alias = alias;
-        SourceMediaFile = source;
+        SourceFileObject = source;
         CountOfObjects = count;
         IsRandom = isRandom;
     }
@@ -38,37 +38,37 @@ public class CustomFileCollection
     public void Out()
     {
         WriteLine($"\nCustomFileCollection: \"{Alias}\"\n");
-        WriteLine($"-> SourceMediaFile: \"{SourceMediaFile}\"");
+        WriteLine($"-> SourceFileObject: \"{SourceFileObject}\"");
         WriteLine($"-> CountOfObjects: \"{CountOfObjects}\"");
         WriteLine($"-> IsRandom: \"{IsRandom}\"");
         WriteLine();
     }
 
-    public List<CustomFileObject> RetrieveMediaObjects()
+    public List<CustomFileObject> RetrieveFileObjects()
     {
-        var mediaObjects = new List<CustomFileObject>();
-        CustomFileObject[] arrayOfMediaObjects = GenerateMediaObjects();
+        var fileObjects = new List<CustomFileObject>();
+        CustomFileObject[] arrayOfFileObjects = GenerateFileObjects();
 
-        foreach (var mediaObject in arrayOfMediaObjects)
+        foreach (var fileObject in arrayOfFileObjects)
         {
-            mediaObjects.Add(mediaObject);
+            fileObjects.Add(fileObject);
         }
 
-        return mediaObjects;
+        return fileObjects;
     }
 
-    private CustomFileObject[] GenerateMediaObjects()
+    private CustomFileObject[] GenerateFileObjects()
     {
-        var arrayOfMediaObjects = new CustomFileObject[CountOfObjects];
+        var arrayOfFileObjects = new CustomFileObject[CountOfObjects];
 
-        for (uint idCounter = 0; idCounter < arrayOfMediaObjects.Length; idCounter++)
+        for (uint idCounter = 0; idCounter < arrayOfFileObjects.Length; idCounter++)
         {
-            string mediaName = IsRandom ? GenerateRandomIdName() : GenerateCustomIdName(idCounter + 1);
-            string mediaPath = GenerateTargetIdPath(mediaName);
-            arrayOfMediaObjects[idCounter] = new CustomFileObject(mediaPath, SourceMediaFile);
+            string fileName = IsRandom ? GenerateRandomIdName() : GenerateCustomIdName(idCounter + 1);
+            string filePath = GenerateTargetIdPath(fileName);
+            arrayOfFileObjects[idCounter] = new CustomFileObject(filePath, SourceFileObject);
         }
 
-        return arrayOfMediaObjects;
+        return arrayOfFileObjects;
     }
 
     private string GenerateTargetIdPath(string targetIdName)
@@ -78,22 +78,20 @@ public class CustomFileCollection
 
     private string GenerateCustomIdName(uint idNumber)
     {
-        return Alias + "_" + GeneratorService.GetIdNumber(idNumber) + GetMediaFileExtensionFromSource();
+        return Alias + "_" + GeneratorService.GetIdNumber(idNumber) + GetFileExtensionFromSource();
     }
 
     private string GenerateRandomIdName()
     {
         // Nexio ID can be consisting from 32 characters.
         // I set the rule that the name has 16 lower and 16 upper case letters.
-        return new RandomFileName(16, 16).Generate() + GetMediaFileExtensionFromSource();
+        return new RandomFileName(16, 16).Generate() + GetFileExtensionFromSource();
     }
 
-    private string GetMediaFileExtensionFromSource()
+    private string GetFileExtensionFromSource()
     {
-        return new FileInfo(SourceMediaFile).Extension;
+        return new FileInfo(SourceFileObject).Extension;
     }
-
-    private string GetAliasByDefault() => "MEDIA";
 
     private string GetOutputDirectory()
     {

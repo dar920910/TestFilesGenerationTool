@@ -4,29 +4,29 @@ namespace TestFilesGenerator.Library;
 
 public class CustomFileStorage
 {
-    private readonly string mediabaseConfiguration;
-    public List<CustomFileCollection> MediaCollections { get; }
+    private readonly string configuration;
+    public List<CustomFileCollection> UserFileCollections { get; }
 
     public CustomFileStorage()
     {
-        mediabaseConfiguration = GetMediaBaseConfigByDefault();
-        MediaCollections = RetrieveListOfMediaCollections();
+        configuration = GetConfigFilePathByDefault();
+        UserFileCollections = RetrieveFileCollections();
     }
 
-    private List<CustomFileCollection> RetrieveListOfMediaCollections()
+    private List<CustomFileCollection> RetrieveFileCollections()
     {
-        var media = new List<CustomFileCollection>();
-        var mediabaseSerializer = new XmlSerializer(typeof(List<CustomFileCollection>));
+        var collection = new List<CustomFileCollection>();
+        var serializer = new XmlSerializer(typeof(List<CustomFileCollection>));
     
-        using (FileStream mediabaseXmlConfig = File.Open(mediabaseConfiguration, FileMode.Open))
+        using (FileStream stream = File.Open(configuration, FileMode.Open))
         {
-            media = (List<CustomFileCollection>)mediabaseSerializer.Deserialize(mediabaseXmlConfig);
+            collection = (List<CustomFileCollection>)serializer.Deserialize(stream);
         }
 
-        return media;
+        return collection;
     }
 
-    private string GetMediaBaseConfigByDefault()
+    private static string GetConfigFilePathByDefault()
     {
         return Path.Combine(Directory.GetCurrentDirectory(), "config.xml");
     }

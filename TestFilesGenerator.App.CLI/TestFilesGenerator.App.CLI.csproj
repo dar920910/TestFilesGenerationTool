@@ -12,16 +12,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Update="mediabase.xml">
+    <None Update="config.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="src\media1">
+    <None Update="src\file1.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="src\media2">
+    <None Update="src\file2.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="src\media3">
+    <None Update="src\file3.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

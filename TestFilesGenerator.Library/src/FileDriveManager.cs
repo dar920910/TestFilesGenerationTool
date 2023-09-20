@@ -45,24 +45,24 @@ public static class FileDriveManager
 
         WriteLine("\n\n   >>> Cleaning ...\n\n");
 
-        foreach (var mediaFile in CurrentFileObjects)
+        foreach (var fileObject in CurrentFileObjects)
         {
             try
             {
-                File.Delete(mediaFile);
-                WriteLine("   >-\\-> SUCCESS DELETING: '{0}'", mediaFile);
+                File.Delete(fileObject);
+                WriteLine("   >-\\-> SUCCESS DELETING: '{0}'", fileObject);
             }
             catch (FileNotFoundException)
             {
-                WriteLine("   >-/-> FAILURE DELETING: Deleting '{0}' was skipped because FileNotFoundException.", mediaFile);
+                WriteLine("   >-/-> FAILURE DELETING: Deleting '{0}' was skipped because FileNotFoundException.", fileObject);
             }
             catch
             {
-                WriteLine("   >-/-> FAILURE DELETING: Deleting '{0}' was skipped because some unknown exception.", mediaFile);
+                WriteLine("   >-/-> FAILURE DELETING: Deleting '{0}' was skipped because some unknown exception.", fileObject);
             }
             finally
             {
-                if (!File.Exists(mediaFile))
+                if (!File.Exists(fileObject))
                 {
                     countOfDeletedIDs++;
                 }
@@ -72,10 +72,10 @@ public static class FileDriveManager
         WriteLine("\n\n   [SUCCESS]: There were deleted {0} files from {1}.\n", countOfDeletedIDs, CurrentFileObjects.Count);
     }
 
-    public static bool CanCreateNewID(CustomFileObject targetMediaFile)
+    public static bool CanCreateNewID(CustomFileObject targetFileObject)
     {
-        long availableDiskSpace = GetFreeDiskSpaceOnStorage(targetMediaFile);
-        long potentialTotalSize = TotalSizeOfIDs + targetMediaFile.SourceMediaFileInfo.Length;
+        long availableDiskSpace = GetFreeDiskSpaceOnStorage(targetFileObject);
+        long potentialTotalSize = TotalSizeOfIDs + targetFileObject.SourceFileInfo.Length;
 
         if (potentialTotalSize < availableDiskSpace)
         {
@@ -88,15 +88,15 @@ public static class FileDriveManager
         return false;
     }
 
-    public static long GetFreeDiskSpaceOnStorage(CustomFileObject targetMediaFile)
+    public static long GetFreeDiskSpaceOnStorage(CustomFileObject targetFileObject)
     {
-        string storage = RetrieveDiskName(targetMediaFile).ToString() + ":\\";
+        string storage = RetrieveDiskName(targetFileObject).ToString() + ":\\";
         return new DriveInfo(storage).AvailableFreeSpace;
     }
 
-    private static char RetrieveDiskName(CustomFileObject targetMediaFile)
+    private static char RetrieveDiskName(CustomFileObject targetFileObject)
     {
-        return targetMediaFile.TargetMediaFileInfo.FullName[0];
+        return targetFileObject.TargetFileInfo.FullName[0];
     }
 
     private static string GetCommonOutputDirectory()

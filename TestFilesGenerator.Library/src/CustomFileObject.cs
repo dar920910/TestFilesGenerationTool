@@ -4,46 +4,46 @@ namespace TestFilesGenerator.Library;
 
 public class CustomFileObject
 {
-    public FileInfo SourceMediaFileInfo { get; }
-    public FileInfo TargetMediaFileInfo { get; }
+    public FileInfo SourceFileInfo { get; }
+    public FileInfo TargetFileInfo { get; }
 
-    public CustomFileObject(string mediaPath, string mediaSource)
+    public CustomFileObject(string targetFileName, string sourceFileName)
     {
         try
         {
-            TargetMediaFileInfo = new FileInfo(mediaPath);
-            SourceMediaFileInfo = new FileInfo(mediaSource);
+            TargetFileInfo = new FileInfo(targetFileName);
+            SourceFileInfo = new FileInfo(sourceFileName);
         }
         catch (FileNotFoundException)
         {
-            WriteLine("[ERROR]: Specified file is not found. The media object cannot be created.");
+            WriteLine("[ERROR]: Specified file is not found. The file object cannot be created.");
         }
     }
 
     public void Clone()
     {
-        CreateMediaObjectCopy();
+        CreateFileObjectCopy();
         FileDriveManager.ShowStorageStatus();
     }
 
-    private void CreateMediaObjectCopy()
+    private void CreateFileObjectCopy()
     {
-        string sourceMediaFile = SourceMediaFileInfo.FullName;
-        string targetMediaFile = TargetMediaFileInfo.FullName;
-        string targetMediaName = TargetMediaFileInfo.Name;
+        string sourceFile = SourceFileInfo.FullName;
+        string targetFile = TargetFileInfo.FullName;
+        string targetName = TargetFileInfo.Name;
 
         if (FileDriveManager.CanCreateNewID(this))
         {
-            File.Copy(sourceMediaFile, targetMediaFile, true);
+            File.Copy(sourceFile, targetFile, true);
 
-            FileDriveManager.CurrentFileObjects.Add(targetMediaFile);
-            FileDriveManager.TotalSizeOfIDs += TargetMediaFileInfo.Length;
+            FileDriveManager.CurrentFileObjects.Add(targetFile);
+            FileDriveManager.TotalSizeOfIDs += TargetFileInfo.Length;
 
-            OutCloningResult(targetMediaName);
+            OutCloningResult(targetName);
         }
         else
         {
-            OutCloningError(targetMediaName);
+            OutCloningError(targetName);
         }
     }
 
