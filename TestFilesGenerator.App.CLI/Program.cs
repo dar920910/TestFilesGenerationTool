@@ -5,9 +5,27 @@ using static System.Console;
 const string appName = "TestFilesGenerator.App.CLI";
 
 BeginRunning(appName);
+
 MediaStorage.InitializeOutputStorage();
-var mediabaseService = new MediabaseService(new MediaBase());
-mediabaseService.CloneIDs();
+
+MediaBase userFileStorage = new();
+List<MediaObject> userFileObjects = new();
+
+foreach (var fileCollection in userFileStorage.MediaCollections)
+{
+    List<MediaObject> collectionFileObjects = fileCollection.RetrieveMediaObjects();
+
+    foreach (var fileObject in collectionFileObjects)
+    {
+        userFileObjects.Add(fileObject);
+    }
+}
+
+foreach (var fileObject in userFileObjects)
+{
+    fileObject.Clone();
+}
+
 EndRunning(appName);
 
 
