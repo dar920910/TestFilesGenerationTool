@@ -1,14 +1,16 @@
-﻿using TestFilesGenerator.Library;
+﻿using System.Diagnostics;
+using TestFilesGenerator.Library;
 using static System.Console;
 
 const string appName = "TestFilesGenerator.App.CLI";
+Stopwatch programExecutionStopwatch = new ();
 
-BeginRunning(appName);
+BeginRunning(appName, programExecutionStopwatch);
 
 FileDriveManager.InitializeOutputStorage();
 
-CustomFileStorage userFileStorage = new();
-List<CustomFileObject> userFileObjects = new();
+CustomFileStorage userFileStorage = new ();
+List<CustomFileObject> userFileObjects = new ();
 
 foreach (CustomFileCollection fileCollection in userFileStorage.UserFileCollections)
 {
@@ -27,16 +29,17 @@ foreach (var fileObject in userFileObjects)
     WriteLine(result.OutputMessage);
 }
 
-EndRunning(appName);
+EndRunning(appName, programExecutionStopwatch);
 
-void BeginRunning(string appName)
+void BeginRunning(string appName, Stopwatch stopwatch)
 {
-    string dateOfStarting = DateTimeService.GetDateAndTimeDefaultString();
-    WriteLine("\n   >>> [ {0} ] {1} : Starting ...\n", dateOfStarting, appName);
+    stopwatch.Start();
+
+    WriteLine("\n   >>> [ {0} ] {1} : Starting ...\n", DateTime.Now, appName);
     WriteLine("\n   {0} starts to process your task ...\n", appName);
 }
 
-void EndRunning(string appName)
+void EndRunning(string appName, Stopwatch stopwatch)
 {
     OutputConsoleDevice.PrintInformationDelimiter();
     WriteLine("   [SUCCESS]: {0} finished its work.\n", appName);
@@ -46,10 +49,17 @@ void EndRunning(string appName)
     {
         Write("\n   Please press either 'YES' or 'NO' ");
         WriteLine("to finish the application ([Y(y)/N(n)]):");
-    } while (!IsRightUserInput(ReadKey()));
+    }
+    while (!IsRightUserInput(ReadKey()));
 
-    string dateOfFinishing = DateTimeService.GetDateAndTimeDefaultString();
-    WriteLine("\n   >>> [ {0} ] {1} : Finishing ...\n", dateOfFinishing, appName);
+    WriteLine("\n   >>> [ {0} ] {1} : Finishing ...\n", DateTime.Now, appName);
+
+    if (stopwatch.IsRunning)
+    {
+        stopwatch.Stop();
+
+        WriteLine($"\n[INFO] Elapsed Program's Execution Time: {stopwatch.Elapsed}\n");
+    }
 }
 
 bool IsRightUserInput(ConsoleKeyInfo keyInfo)
