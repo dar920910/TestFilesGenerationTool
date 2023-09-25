@@ -1,19 +1,23 @@
 //-----------------------------------------------------------------------
-// <copyright file="CustomFileObject.cs" company="DemoProjectsWorkshop">
-//     Company copyright tag.
+// <copyright file="CustomFileObject.cs" company="Demo Projects Workshop">
+// Copyright (c) Demo Projects Workshop. All rights reserved.
 // </copyright>
 //-----------------------------------------------------------------------
 
 namespace TestFilesGenerator.Library;
 
+/// <summary>
+/// Represents file system's object which can be copied by a user.
+/// </summary>
 public class CustomFileObject
 {
     private string resultOutputMessage;
 
-    public FileInfo SourceFileInfo { get; }
-
-    public FileInfo TargetFileInfo { get; }
-
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CustomFileObject"/> class.
+    /// </summary>
+    /// <param name="targetFileName">User-defined file name for a target file object.</param>
+    /// <param name="sourceFileName">User-defined file name for a source file object.</param>
     public CustomFileObject(string targetFileName, string sourceFileName)
     {
         this.resultOutputMessage = default;
@@ -28,6 +32,18 @@ public class CustomFileObject
             this.resultOutputMessage = "[ERROR]: Specified file is not found. The file object cannot be created.";
         }
     }
+
+    /// <summary>
+    /// Gets the file path for a source object in the file system.
+    /// </summary>
+    /// <value>The source file path.</value>
+    public FileInfo SourceFileInfo { get; }
+
+    /// <summary>
+    /// Gets the file path for a target object in the file system.
+    /// </summary>
+    /// <value>The target file path.</value>
+    public FileInfo TargetFileInfo { get; }
 
     /// <summary>
     /// Create a target file object from its source file.
@@ -162,7 +178,16 @@ public class CustomFileObject
 
 public record CustomFileObjectCreationResult
 {
+    /// <summary>
+    /// Gets a result output message.
+    /// </summary>
+    /// <value>The string with a result message.</value>
     public string OutputMessage { get; }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CustomFileObjectCreationResult"/> class.
+    /// </summary>
+    /// <param name="message">Result information message to output.</param>
     public CustomFileObjectCreationResult(string message)
     {
         this.OutputMessage = message;

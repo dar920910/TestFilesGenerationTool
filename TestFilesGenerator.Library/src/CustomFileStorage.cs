@@ -1,23 +1,32 @@
-using System.Runtime.InteropServices;
-using System.Xml.Serialization;
+//-----------------------------------------------------------------------
+// <copyright file="CustomFileStorage.cs" company="Demo Projects Workshop">
+// Copyright (c) Demo Projects Workshop. All rights reserved.
+// </copyright>
+//-----------------------------------------------------------------------
 
 namespace TestFilesGenerator.Library;
 
+using System.Runtime.InteropServices;
+using System.Xml.Serialization;
+
 public class CustomFileStorage
 {
+    private static readonly string StorageOutputDirectory;
+    private static readonly string StorageConfiguration;
+
     static CustomFileStorage()
     {
-        storageOutputDirectory = Path.Combine(Directory.GetCurrentDirectory(), "out");
-        storageConfiguration = Path.Combine(Directory.GetCurrentDirectory(), "config.xml");
+        StorageOutputDirectory = Path.Combine(Directory.GetCurrentDirectory(), "out");
+        StorageConfiguration = Path.Combine(Directory.GetCurrentDirectory(), "config.xml");
 
-        if (!Directory.Exists(storageOutputDirectory))
+        if (!Directory.Exists(StorageOutputDirectory))
         {
-            Directory.CreateDirectory(storageOutputDirectory);
+            Directory.CreateDirectory(StorageOutputDirectory);
         }
 
-        if (Directory.GetDirectories(storageOutputDirectory).Length > 0)
+        if (Directory.GetDirectories(StorageOutputDirectory).Length > 0)
         {
-            Directory.Delete(path: storageOutputDirectory, recursive: true);
+            Directory.Delete(path: StorageOutputDirectory, recursive: true);
         }
 
         CurrentFileObjects = new List<string>();
@@ -26,11 +35,8 @@ public class CustomFileStorage
 
     public CustomFileStorage()
     {
-        this.UserFileCollections = RetrieveFileCollections();
+        this.UserFileCollections = this.RetrieveFileCollections();
     }
-
-    private static readonly string storageOutputDirectory;
-    private static readonly string storageConfiguration;
 
     public static List<string> CurrentFileObjects { get; set; }
 
@@ -59,12 +65,12 @@ public class CustomFileStorage
             return new DriveInfo(storage).AvailableFreeSpace;
         }
 
-        return new DriveInfo(storageOutputDirectory).AvailableFreeSpace;
+        return new DriveInfo(StorageOutputDirectory).AvailableFreeSpace;
     }
 
     public static string GetCustomFileCollectionDirectory(string collectionAlias)
     {
-        string directory = Path.Combine(storageOutputDirectory, collectionAlias);
+        string directory = Path.Combine(StorageOutputDirectory, collectionAlias);
 
         if (!Directory.Exists(directory))
         {
@@ -107,7 +113,7 @@ public class CustomFileStorage
             }
         }
 
-        Directory.Delete(path: storageOutputDirectory, recursive: true);
+        Directory.Delete(path: StorageOutputDirectory, recursive: true);
         result.SaveInfoAboutAllFileObjects(countOfDeletedIDs);
 
         return result;
@@ -123,7 +129,7 @@ public class CustomFileStorage
         var collection = new List<CustomFileCollection>();
         var serializer = new XmlSerializer(typeof(List<CustomFileCollection>));
 
-        using (FileStream stream = File.Open(storageConfiguration, FileMode.Open))
+        using (FileStream stream = File.Open(StorageConfiguration, FileMode.Open))
         {
             collection = (List<CustomFileCollection>)serializer.Deserialize(stream);
         }

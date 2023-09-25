@@ -1,4 +1,10 @@
-﻿using System.Diagnostics;
+﻿//-----------------------------------------------------------------------
+// <copyright file="Program.cs" company="Demo Projects Workshop">
+// Copyright (c) Demo Projects Workshop. All rights reserved.
+// </copyright>
+//-----------------------------------------------------------------------
+
+using System.Diagnostics;
 using TestFilesGenerator.Library;
 using static System.Console;
 

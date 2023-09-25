@@ -1,10 +1,35 @@
-﻿using System.Xml.Serialization;
-using static System.Console;
+﻿//-----------------------------------------------------------------------
+// <copyright file="CustomFileCollection.cs" company="Demo Projects Workshop">
+// Copyright (c) Demo Projects Workshop. All rights reserved.
+// </copyright>
+//-----------------------------------------------------------------------
 
 namespace TestFilesGenerator.Library;
 
+using System.Xml.Serialization;
+
 public class CustomFileCollection
 {
+    public CustomFileCollection()
+    {
+    }
+
+    public CustomFileCollection(string alias, string source, uint count)
+    {
+        this.Alias = alias;
+        this.SourceFileObject = source;
+        this.CountOfObjects = count;
+        this.IsRandom = false;
+    }
+
+    public CustomFileCollection(string alias, string source, uint count, bool isRandom)
+    {
+        this.Alias = alias;
+        this.SourceFileObject = source;
+        this.CountOfObjects = count;
+        this.IsRandom = isRandom;
+    }
+
     [XmlAttribute("Alias")]
     public string Alias { get; set; }
 
@@ -17,28 +42,10 @@ public class CustomFileCollection
     [XmlAttribute("RandomMode")]
     public bool IsRandom { get; set; }
 
-    public CustomFileCollection() { }
-
-    public CustomFileCollection(string alias, string source, uint count)
-    {
-        Alias = alias;
-        SourceFileObject = source;
-        CountOfObjects = count;
-        IsRandom = false;
-    }
-
-    public CustomFileCollection(string alias, string source, uint count, bool isRandom)
-    {
-        Alias = alias;
-        SourceFileObject = source;
-        CountOfObjects = count;
-        IsRandom = isRandom;
-    }
-
     public List<CustomFileObject> RetrieveFileObjects()
     {
         var fileObjects = new List<CustomFileObject>();
-        CustomFileObject[] arrayOfFileObjects = GenerateFileObjects();
+        CustomFileObject[] arrayOfFileObjects = this.GenerateFileObjects();
 
         foreach (var fileObject in arrayOfFileObjects)
         {
@@ -50,13 +57,13 @@ public class CustomFileCollection
 
     private CustomFileObject[] GenerateFileObjects()
     {
-        var arrayOfFileObjects = new CustomFileObject[CountOfObjects];
+        var arrayOfFileObjects = new CustomFileObject[this.CountOfObjects];
 
         for (uint idCounter = 0; idCounter < arrayOfFileObjects.Length; idCounter++)
         {
-            string fileName = IsRandom ? GenerateRandomIdName() : GenerateCustomIdName(idCounter + 1);
-            string filePath = GenerateTargetIdPath(fileName);
-            arrayOfFileObjects[idCounter] = new CustomFileObject(filePath, SourceFileObject);
+            string fileName = this.IsRandom ? this.GenerateRandomIdName() : this.GenerateCustomIdName(idCounter + 1);
+            string filePath = this.GenerateTargetIdPath(fileName);
+            arrayOfFileObjects[idCounter] = new CustomFileObject(filePath, this.SourceFileObject);
         }
 
         return arrayOfFileObjects;

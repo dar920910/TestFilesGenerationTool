@@ -1,6 +1,12 @@
-using TestFilesGenerator.Library;
+//-----------------------------------------------------------------------
+// <copyright file="GeneratorTest.cs" company="Demo Projects Workshop">
+// Copyright (c) Demo Projects Workshop. All rights reserved.
+// </copyright>
+//-----------------------------------------------------------------------
 
 namespace TestFilesGenerator.Testing;
+
+using TestFilesGenerator.Library;
 
 public class GeneratorTest
 {
