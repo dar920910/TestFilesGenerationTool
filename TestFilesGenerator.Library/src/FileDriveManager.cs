@@ -1,13 +1,14 @@
 using System.Runtime.InteropServices;
-using static System.Console;
 
 namespace TestFilesGenerator.Library;
 
 public static class FileDriveManager
 {
-    public static List<string> CurrentFileObjects { get; set; }
-    public static long TotalSizeOfIDs { get; set; }
     public static readonly string OutputDirectory;
+
+    public static List<string> CurrentFileObjects { get; set; }
+
+    public static long TotalSizeOfIDs { get; set; }
 
     static FileDriveManager()
     {
@@ -24,45 +25,35 @@ public static class FileDriveManager
 
     public static void InitializeOutputStorage()
     {
-        WriteLine("   >>> Initializing the output storage for IDs ...\n");
-
         if (Directory.GetDirectories(OutputDirectory).Length > 0)
         {
             Directory.Delete(path: OutputDirectory, recursive: true);
-            WriteLine($"   >-\\-> Deleted all existing content from the output directory '{OutputDirectory}'.");
         }
-
-        WriteLine();
     }
 
-    public static void ShowStorageStatus()
+    public static CustomFileStorageCleaningResult CleanBusyDiskSpace()
     {
-        WriteLine();
-        WriteLine("   [?] Total Size of IDs : {0} bytes.", TotalSizeOfIDs);
-        WriteLine("   [?] Total Count of IDs : {0} files.", CurrentFileObjects.Count);
-        WriteLine();
-    }
+        CustomFileStorageCleaningResult result = new ();
 
-    public static void CleanBusyDiskSpace()
-    {
         uint countOfDeletedIDs = 0;
 
-        WriteLine("\n\n   >>> Cleaning ...\n\n");
-
-        foreach (var fileObject in CurrentFileObjects)
+        foreach (string fileObject in CurrentFileObjects)
         {
             try
             {
                 File.Delete(fileObject);
-                WriteLine("   >-\\-> SUCCESS DELETING: '{0}'", fileObject);
+                result.SaveMessageAboutFileObject(
+                    $"   >-\\-> SUCCESS DELETING: '{fileObject}'");
             }
             catch (FileNotFoundException)
             {
-                WriteLine("   >-/-> FAILURE DELETING: Deleting '{0}' was skipped because FileNotFoundException.", fileObject);
+                result.SaveMessageAboutFileObject(
+                    $"   >-/-> FAILURE DELETING: Deleting '{fileObject}' was skipped because FileNotFoundException.");
             }
             catch
             {
-                WriteLine("   >-/-> FAILURE DELETING: Deleting '{0}' was skipped because some unknown exception.", fileObject);
+                result.SaveMessageAboutFileObject(
+                    $"   >-/-> FAILURE DELETING: Deleting '{fileObject}' was skipped because some unknown exception.");
             }
             finally
             {
@@ -73,8 +64,10 @@ public static class FileDriveManager
             }
         }
 
-        WriteLine("\n\n   [SUCCESS]: There were deleted {0} files from {1}.\n", countOfDeletedIDs, CurrentFileObjects.Count);
         Directory.Delete(path: OutputDirectory, recursive: true);
+        result.SaveInfoAboutAllFileObjects(countOfDeletedIDs);
+
+        return result;
     }
 
     public static bool CanCreateNewID(CustomFileObject targetFileObject)
@@ -86,9 +79,6 @@ public static class FileDriveManager
         {
             return true;
         }
-
-        Write("[CAUTION]: Cannot generate a new instance of the file. ");
-        WriteLine("There is no enough available space on the storage.");
 
         return false;
     }
@@ -108,4 +98,19 @@ public static class FileDriveManager
     {
         return targetFileObject.TargetFileInfo.FullName[0];
     }
+}
+
+public record CustomFileStorageCleaningResult
+{
+    public List<string> OutputMessages { get; private set; }
+
+    public CustomFileStorageCleaningResult()
+    {
+        this.OutputMessages = new List<string>() { "\n\n   >>> Cleaning ...\n\n" };
+    }
+
+    public void SaveMessageAboutFileObject(string message) =>
+        this.OutputMessages.Add(message);
+    public void SaveInfoAboutAllFileObjects(uint cleanedFilesCount) =>
+        this.OutputMessages.Add($"\n\n   [INFO]: Deleted {cleanedFilesCount} files.\n");
 }

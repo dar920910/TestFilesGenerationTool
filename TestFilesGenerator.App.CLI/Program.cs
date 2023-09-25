@@ -7,6 +7,7 @@ Stopwatch programExecutionStopwatch = new ();
 
 BeginRunning(appName, programExecutionStopwatch);
 
+WriteLine("   >>> Initializing the output storage for IDs ...\n");
 FileDriveManager.InitializeOutputStorage();
 
 CustomFileStorage userFileStorage = new ();
@@ -77,7 +78,8 @@ bool IsRightUserInput(ConsoleKeyInfo keyInfo)
 
     if (answerYes)
     {
-        FileDriveManager.CleanBusyDiskSpace();
+        CustomFileStorageCleaningResult result = FileDriveManager.CleanBusyDiskSpace();
+        OutputConsoleDevice.PrintCustomFileStorageCleaningResult(result);
         return true;
     }
 

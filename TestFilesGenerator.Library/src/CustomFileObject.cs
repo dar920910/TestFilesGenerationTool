@@ -53,13 +53,17 @@ public class CustomFileObject
             this.resultOutputMessage += GetCloningErrorMessage(targetName);
         }
 
-        FileDriveManager.ShowStorageStatus();
+        this.resultOutputMessage +=
+            $"\n   [?] Total Size of IDs : {FileDriveManager.TotalSizeOfIDs} bytes." +
+                $"   [?] Total Count of IDs : {FileDriveManager.CurrentFileObjects.Count} files.\n";
 
         return new CustomFileObjectCreationResult(this.resultOutputMessage);
     }
 
     private static string GetCloningErrorMessage(string idName) =>
-        $"   [ERROR]: {idName} cannot be created via cloning.";
+        "[CAUTION]: Cannot generate a new instance of the file. " +
+            "There is no enough available space on the storage." +
+                $"   [ERROR]: {idName} cannot be created via cloning.";
 
     private static string GetFileObjectCreationDateTime()
     {

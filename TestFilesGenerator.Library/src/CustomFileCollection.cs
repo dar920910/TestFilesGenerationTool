@@ -35,15 +35,6 @@ public class CustomFileCollection
         IsRandom = isRandom;
     }
 
-    public void Out()
-    {
-        WriteLine($"\nCustomFileCollection: \"{Alias}\"\n");
-        WriteLine($"-> SourceFileObject: \"{SourceFileObject}\"");
-        WriteLine($"-> CountOfObjects: \"{CountOfObjects}\"");
-        WriteLine($"-> IsRandom: \"{IsRandom}\"");
-        WriteLine();
-    }
-
     public List<CustomFileObject> RetrieveFileObjects()
     {
         var fileObjects = new List<CustomFileObject>();
