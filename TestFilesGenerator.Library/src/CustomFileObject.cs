@@ -39,12 +39,12 @@ public class CustomFileObject
         string targetFile = this.TargetFileInfo.FullName;
         string targetName = this.TargetFileInfo.Name;
 
-        if (FileDriveManager.CanCreateNewID(this))
+        if (CustomFileStorage.CanCreateNewID(this))
         {
             File.Copy(sourceFile, targetFile, true);
 
-            FileDriveManager.CurrentFileObjects.Add(targetFile);
-            FileDriveManager.TotalSizeOfIDs += this.TargetFileInfo.Length;
+            CustomFileStorage.CurrentFileObjects.Add(targetFile);
+            CustomFileStorage.TotalSizeOfIDs += this.TargetFileInfo.Length;
 
             this.resultOutputMessage += this.GetCloningResultMessage(targetName);
         }
@@ -54,8 +54,8 @@ public class CustomFileObject
         }
 
         this.resultOutputMessage +=
-            $"\n   [?] Total Size of IDs : {FileDriveManager.TotalSizeOfIDs} bytes." +
-                $"   [?] Total Count of IDs : {FileDriveManager.CurrentFileObjects.Count} files.\n";
+            $"\n   [?] Total Size of IDs : {CustomFileStorage.TotalSizeOfIDs} bytes." +
+                $"\n   [?] Total Count of IDs : {CustomFileStorage.CurrentFileObjects.Count} files.\n";
 
         return new CustomFileObjectCreationResult(this.resultOutputMessage);
     }
@@ -157,7 +157,7 @@ public class CustomFileObject
 
     private string GetCloningResultMessage(string idName) =>
         $"   [{GetFileObjectCreationDateTime()}]: {idName}\n" +
-        $"   [!] Available Space: {FileDriveManager.GetFreeDiskSpaceOnStorage(this)} bytes.";
+        $"\n   [!] Available Space: {CustomFileStorage.GetFreeDiskSpaceOnStorage(this)} bytes.\n";
 }
 
 public record CustomFileObjectCreationResult

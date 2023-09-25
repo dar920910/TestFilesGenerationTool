@@ -64,7 +64,8 @@ public class CustomFileCollection
 
     private string GenerateTargetIdPath(string targetIdName)
     {
-        return Path.Combine(GetOutputDirectory(), targetIdName);
+        string targetDirectory = CustomFileStorage.GetCustomFileCollectionDirectory(this.Alias);
+        return Path.Combine(targetDirectory, targetIdName);
     }
 
     private string GenerateCustomIdName(uint idNumber) =>
@@ -80,18 +81,6 @@ public class CustomFileCollection
     private string GetFileExtensionFromSource()
     {
         return new FileInfo(this.SourceFileObject).Extension;
-    }
-
-    private string GetOutputDirectory()
-    {
-        string outputDirectory = Path.Combine(FileDriveManager.OutputDirectory, Alias);
-
-        if (!Directory.Exists(outputDirectory))
-        {
-            Directory.CreateDirectory(outputDirectory);
-        }
-
-        return outputDirectory;
     }
 }
 
