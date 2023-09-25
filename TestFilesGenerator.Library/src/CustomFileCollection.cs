@@ -76,10 +76,8 @@ public class CustomFileCollection
         return Path.Combine(GetOutputDirectory(), targetIdName);
     }
 
-    private string GenerateCustomIdName(uint idNumber)
-    {
-        return Alias + "_" + GeneratorService.GetIdNumber(idNumber) + GetFileExtensionFromSource();
-    }
+    private string GenerateCustomIdName(uint idNumber) =>
+        $"{this.Alias}_{new CollectionFileObjectNumberId(idNumber).Create()}{this.GetFileExtensionFromSource()}";
 
     private string GenerateRandomIdName()
     {
@@ -104,4 +102,82 @@ public class CustomFileCollection
 
         return outputDirectory;
     }
+}
+
+/// <summary>
+/// Represents a numeric ID for a file object from a custom file collection.
+/// </summary>
+public class CollectionFileObjectNumberId
+{
+    private const uint ValueLevel1 = 1_000_000;
+    private const uint ValueLevel2 = 100_000;
+    private const uint ValueLevel3 = 10_000;
+    private const uint ValueLevel4 = 1_000;
+    private const uint ValueLevel5 = 100;
+    private const uint ValueLevel6 = 10;
+
+    private readonly uint fileObjectNumber;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="CollectionFileObjectNumberId"/> class.
+    /// </summary>
+    /// <param name="number">Number of a file object in a custom file collection.</param>
+    public CollectionFileObjectNumberId(uint number)
+    {
+        this.fileObjectNumber = number;
+    }
+
+    /// <summary>
+    /// Create a numeric ID for a file object.
+    /// </summary>
+    /// <returns>Numeric ID of a file object.</returns>
+    public string Create()
+    {
+        string targetNumber;
+
+        if (this.fileObjectNumber < ValueLevel6)
+        {
+            targetNumber = AddZeroes(6);
+        }
+        else if (this.fileObjectNumber < ValueLevel5)
+        {
+            targetNumber = AddZeroes(5);
+        }
+        else if (this.fileObjectNumber < ValueLevel4)
+        {
+            targetNumber = AddZeroes(4);
+        }
+        else if (this.fileObjectNumber < ValueLevel3)
+        {
+            targetNumber = AddZeroes(3);
+        }
+        else if (this.fileObjectNumber < ValueLevel2)
+        {
+            targetNumber = AddZeroes(2);
+        }
+        else if (this.fileObjectNumber < ValueLevel1)
+        {
+            targetNumber = AddZeroes(1);
+        }
+        else
+        {
+            targetNumber = string.Empty;
+        }
+
+        return targetNumber + this.fileObjectNumber.ToString();
+    }
+
+    private static string AddZeroes(int countZeroes)
+    {
+        string zeroString = string.Empty;
+
+        for (int i = 0; i < countZeroes; i++)
+        {
+            zeroString += AddZero();
+        }
+
+        return zeroString;
+    }
+
+    private static string AddZero() => "0";
 }
