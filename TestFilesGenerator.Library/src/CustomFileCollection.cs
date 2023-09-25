@@ -81,14 +81,14 @@ public class CustomFileCollection
 
     private string GenerateRandomIdName()
     {
-        // Nexio ID can be consisting from 32 characters.
+        // File object ID can be consisting from 32 characters.
         // I set the rule that the name has 16 lower and 16 upper case letters.
-        return new RandomFileName(16, 16).Generate() + GetFileExtensionFromSource();
+        return new RandomFileObjectName(16, 16).Create() + this.GetFileExtensionFromSource();
     }
 
     private string GetFileExtensionFromSource()
     {
-        return new FileInfo(SourceFileObject).Extension;
+        return new FileInfo(this.SourceFileObject).Extension;
     }
 
     private string GetOutputDirectory()
@@ -180,4 +180,159 @@ public class CollectionFileObjectNumberId
     }
 
     private static string AddZero() => "0";
+}
+
+/// <summary>
+/// Represents a random name for a file object from a custom file collection.
+/// </summary>
+public class RandomFileObjectName
+{
+    private readonly byte nameLength;
+    private readonly byte nameLowers;
+    private readonly byte nameUppers;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="RandomFileObjectName"/> class.
+    /// </summary>
+    /// <param name="lowers">Count of letters in lower-case in the target name.</param>
+    /// <param name="uppers">Count of letters in upper-case in the target name.</param>
+    public RandomFileObjectName(byte lowers, byte uppers)
+    {
+        this.nameLength = (byte)(lowers + uppers);
+        this.nameLowers = lowers;
+        this.nameUppers = uppers;
+    }
+
+    /// <summary>
+    /// Create a random file name for a file object of a custom file collection.
+    /// </summary>
+    /// <returns>Random file name of a file object from a custom file collection.</returns>
+    public string Create()
+    {
+        string targetRandomIdName = string.Empty;
+
+        char[] lowersArray = this.GenerateLetters(this.nameLowers, false);
+        char[] uppersArray = this.GenerateLetters(this.nameUppers, true);
+
+        List<char> lowersList = this.FillListOfLetters(lowersArray);
+        List<char> uppersList = this.FillListOfLetters(uppersArray);
+
+        for (byte i = 0; i < this.nameLength; i++)
+        {
+            char letter;
+
+            if (this.IsUpperCase())
+            {
+                letter = this.RetrieveLetterFromList(ref uppersList);
+            }
+            else
+            {
+                letter = this.RetrieveLetterFromList(ref lowersList);
+            }
+
+            targetRandomIdName += Convert.ToString(letter);
+        }
+
+        return targetRandomIdName;
+    }
+
+    private bool IsUpperCase()
+    {
+        // This is logic to choose letter's case by random way.
+        int random = new Random().Next(0, 2);
+
+        if (random == 1)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    private char RetrieveLetterFromList(ref List<char> lettersList)
+    {
+        char letter;
+        byte random;
+
+        try
+        {
+            random = Convert.ToByte(new Random().Next(0, lettersList.Count));
+
+            // Retrieve a random letter from the list.
+            letter = lettersList[(int)random];
+
+            // Remove this retrieved letter from the list.
+            lettersList.RemoveAt((int)random);
+        }
+        catch (ArgumentOutOfRangeException)
+        {
+            // The following code was added to process the exception throwing.
+            random = Convert.ToByte(new Random().Next(0, 2));
+            letter = (random == 1) ? '#' : '$';
+        }
+
+        return letter;
+    }
+
+    private List<char> FillListOfLetters(char[] lettersArray)
+    {
+        var lettersList = new List<char>(lettersArray.Length);
+
+        foreach (var letter in lettersArray)
+        {
+            lettersList.Add(letter);
+        }
+
+        return lettersList;
+    }
+
+    private char[] GenerateLetters(int count, bool isUpper)
+    {
+        var letters = new char[count];
+
+        if (isUpper)
+        {
+            this.PopulateUppersArray(ref letters);
+        }
+        else
+        {
+            this.PopulateLowersArray(ref letters);
+        }
+
+        return letters;
+    }
+
+    private void PopulateLowersArray(ref char[] letters)
+    {
+        for (byte i = 0; i < letters.Length; i++)
+        {
+            letters[i] = this.GetRandomLowerLetter();
+        }
+    }
+
+    private void PopulateUppersArray(ref char[] letters)
+    {
+        for (byte i = 0; i < letters.Length; i++)
+        {
+            letters[i] = this.GetRandomUpperLetter();
+        }
+    }
+
+    private char GetRandomLowerLetter()
+    {
+        // I use ASCII notation for generating random character:
+        // 97 integer literal is 'a' letter from ASCII
+        // 122 integer literal is 'z' (ASCII)
+        int random = new Random().Next(97, 122 + 1);
+        return Convert.ToChar(random);
+    }
+
+    private char GetRandomUpperLetter()
+    {
+        // I use ASCII notation for generating random character:
+        // 65 integer literal is 'A' letter from ASCII
+        // 90 integer literal is 'Z' (ASCII)
+        int random = new Random().Next(65, 90 + 1);
+        return Convert.ToChar(random);
+    }
 }
