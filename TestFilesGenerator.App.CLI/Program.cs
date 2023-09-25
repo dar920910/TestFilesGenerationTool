@@ -1,7 +1,6 @@
 ﻿using TestFilesGenerator.Library;
 using static System.Console;
 
-
 const string appName = "TestFilesGenerator.App.CLI";
 
 BeginRunning(appName);
@@ -23,11 +22,12 @@ foreach (CustomFileCollection fileCollection in userFileStorage.UserFileCollecti
 
 foreach (var fileObject in userFileObjects)
 {
-    fileObject.Clone();
+    CustomFileObjectCreationResult result = fileObject.Clone();
+    OutputConsoleDevice.PrintInformationDelimiter();
+    WriteLine(result.OutputMessage);
 }
 
 EndRunning(appName);
-
 
 void BeginRunning(string appName)
 {
@@ -38,7 +38,7 @@ void BeginRunning(string appName)
 
 void EndRunning(string appName)
 {
-    WriteLine("{0}\n", GeneratorService.BuildSeparator());
+    OutputConsoleDevice.PrintInformationDelimiter();
     WriteLine("   [SUCCESS]: {0} finished its work.\n", appName);
     WriteLine("   Would you like to delete the test data object?");
 

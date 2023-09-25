@@ -1,61 +1,76 @@
-using static System.Console;
+//-----------------------------------------------------------------------
+// <copyright file="CustomFileObject.cs" company="DemoProjectsWorkshop">
+//     Company copyright tag.
+// </copyright>
+//-----------------------------------------------------------------------
 
 namespace TestFilesGenerator.Library;
 
 public class CustomFileObject
 {
+    private string resultOutputMessage;
+
     public FileInfo SourceFileInfo { get; }
+
     public FileInfo TargetFileInfo { get; }
 
     public CustomFileObject(string targetFileName, string sourceFileName)
     {
+        this.resultOutputMessage = default;
+
         try
         {
-            TargetFileInfo = new FileInfo(targetFileName);
-            SourceFileInfo = new FileInfo(sourceFileName);
+            this.TargetFileInfo = new FileInfo(targetFileName);
+            this.SourceFileInfo = new FileInfo(sourceFileName);
         }
         catch (FileNotFoundException)
         {
-            WriteLine("[ERROR]: Specified file is not found. The file object cannot be created.");
+            this.resultOutputMessage = "[ERROR]: Specified file is not found. The file object cannot be created.";
         }
     }
 
-    public void Clone()
+    /// <summary>
+    /// Create a target file object from its source file.
+    /// </summary>
+    /// <returns>Result record with information about made cloning.</returns>
+    public CustomFileObjectCreationResult Clone()
     {
-        CreateFileObjectCopy();
-        FileDriveManager.ShowStorageStatus();
-    }
-
-    private void CreateFileObjectCopy()
-    {
-        string sourceFile = SourceFileInfo.FullName;
-        string targetFile = TargetFileInfo.FullName;
-        string targetName = TargetFileInfo.Name;
+        string sourceFile = this.SourceFileInfo.FullName;
+        string targetFile = this.TargetFileInfo.FullName;
+        string targetName = this.TargetFileInfo.Name;
 
         if (FileDriveManager.CanCreateNewID(this))
         {
             File.Copy(sourceFile, targetFile, true);
 
             FileDriveManager.CurrentFileObjects.Add(targetFile);
-            FileDriveManager.TotalSizeOfIDs += TargetFileInfo.Length;
+            FileDriveManager.TotalSizeOfIDs += this.TargetFileInfo.Length;
 
-            OutCloningResult(targetName);
+            this.resultOutputMessage += this.GetCloningResultMessage(targetName);
         }
         else
         {
-            OutCloningError(targetName);
+            this.resultOutputMessage += GetCloningErrorMessage(targetName);
         }
+
+        FileDriveManager.ShowStorageStatus();
+
+        return new CustomFileObjectCreationResult(this.resultOutputMessage);
     }
 
-    private void OutCloningResult(string idName)
-    {
-        WriteLine("{0}\n", GeneratorService.BuildSeparator());
-        WriteLine($"   [{DateTimeService.GetDateAndTimeDefaultString()}]: {idName}\n");
-        WriteLine("   [!] Available Space: {0} bytes.", FileDriveManager.GetFreeDiskSpaceOnStorage(this));
-    }
+    private static string GetCloningErrorMessage(string idName) =>
+        $"   [ERROR]: {idName} cannot be created via cloning.";
 
-    private void OutCloningError(string idName)
+    private string GetCloningResultMessage(string idName) =>
+        $"   [{DateTimeService.GetDateAndTimeDefaultString()}]: {idName}\n" +
+        $"   [!] Available Space: {FileDriveManager.GetFreeDiskSpaceOnStorage(this)} bytes.";
+}
+
+public record CustomFileObjectCreationResult
+{
+    public string OutputMessage { get; }
+    public CustomFileObjectCreationResult(string message)
     {
-        WriteLine($"   [ERROR]: {idName} cannot be created via cloning.");
+        this.OutputMessage = message;
     }
 }
