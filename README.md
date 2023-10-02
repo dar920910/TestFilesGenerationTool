@@ -1,4 +1,4 @@
-# TestFilesGenerationTool
+# :file_folder: Test Files Generation Tool
 
 :pushpin: Currently, the project is included to my summary repository of demo projects:
 
@@ -10,9 +10,9 @@
 
 This project is my attempt to implement a **flexible** tool to generate files by a custom template.
 
-I created this software in 2021 to generate test media base environment (~ 200 000 files) for the Nexio AMP server when I've worked in the [NexioMOS](https://imaginecommunications.com/product/nexio-amp/) commercial project as QA engineer.
+I created this software in 2021 to generate test media base environment (~ 200 000 files) for the Nexio AMP server when I've worked in the [Nexio MOS](https://imaginecommunications.com/product/nexio-amp/) commercial project as QA engineer.
 
-Now I finished migration of the tool from **.NET Core 3.1** to **.NET 6** target platform.
+Now I finished migration of the tool from .NET Core 3.1 to **.NET 6** target platform.
 Also there were removed all mentions related to Nexio commercial product.
 
 ## :question: About the Repository Structure
