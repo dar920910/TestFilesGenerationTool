@@ -60,6 +60,26 @@ public class CustomFileCollection
     public bool IsRandom { get; set; }
 
     /// <summary>
+    /// Retrieves names of possible file objects by collection's parameters.
+    /// </summary>
+    /// <param name="alias">The name of a collection.</param>
+    /// <param name="source">The source filename.</param>
+    /// <param name="count">The count of file objects.</param>
+    /// <returns>The list of names for possible file objects.</returns>
+    public static List<string> RetrieveFileObjectNames(string alias, string source, uint count)
+    {
+        List<string> fileObjectNames = new ();
+
+        for (uint number = 1; number <= count; number++)
+        {
+            string idName = GenerateCustomIdName(alias, source, number);
+            fileObjectNames.Add(idName);
+        }
+
+        return fileObjectNames;
+    }
+
+    /// <summary>
     /// Retrieves file objects from the custom file collection.
     /// </summary>
     /// <returns>The list of custom file objects.</returns>
@@ -76,13 +96,18 @@ public class CustomFileCollection
         return fileObjects;
     }
 
+    private static string GenerateCustomIdName(string alias, string filename, uint number) =>
+        $"{alias}_{new CollectionFileObjectNumberId(number).Create()}{GetFileExtensionFromSource(filename)}";
+
+    private static string GetFileExtensionFromSource(string source) => new FileInfo(source).Extension;
+
     private CustomFileObject[] GenerateFileObjects()
     {
         var arrayOfFileObjects = new CustomFileObject[this.CountOfObjects];
 
         for (uint idCounter = 0; idCounter < arrayOfFileObjects.Length; idCounter++)
         {
-            string fileName = this.IsRandom ? this.GenerateRandomIdName() : this.GenerateCustomIdName(idCounter + 1);
+            string fileName = this.IsRandom ? this.GenerateRandomIdName() : GenerateCustomIdName(this.Alias, this.SourceFileObject, idCounter + 1);
             string filePath = this.GenerateTargetIdPath(fileName);
             arrayOfFileObjects[idCounter] = new CustomFileObject(filePath, this.SourceFileObject);
         }
@@ -96,19 +121,11 @@ public class CustomFileCollection
         return Path.Combine(targetDirectory, targetIdName);
     }
 
-    private string GenerateCustomIdName(uint idNumber) =>
-        $"{this.Alias}_{new CollectionFileObjectNumberId(idNumber).Create()}{this.GetFileExtensionFromSource()}";
-
     private string GenerateRandomIdName()
     {
         // File object ID can be consisting from 32 characters.
         // I set the rule that the name has 16 lower and 16 upper case letters.
-        return new RandomFileObjectName(16, 16).Create() + this.GetFileExtensionFromSource();
-    }
-
-    private string GetFileExtensionFromSource()
-    {
-        return new FileInfo(this.SourceFileObject).Extension;
+        return new RandomFileObjectName(16, 16).Create() + GetFileExtensionFromSource(this.SourceFileObject);
     }
 }
 

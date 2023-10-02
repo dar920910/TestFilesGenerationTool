@@ -11,91 +11,86 @@ using TestFilesGenerator.Library;
 /// <summary>
 /// Contains unit tests for the CustomFileCollection class.
 /// </summary>
-public class GeneratorTest
+public class CustomFileCollectionTest
 {
     /// <summary>
-    /// Tests creating file object's name when using a number from the Level #1.
-    /// This range contains integers more than 100_000 and less than 1_000_000.
+    /// Tests retrieving names of file objects by collection's alias, source, and count.
+    /// This test method is intended to explore the unit test when debugging session.
     /// </summary>
     [Test]
-    public void GetIdNumber_WhenValueLevel1()
+    public void RetrieveFileObjectNamesTestCase_1()
     {
-        string idNumber = new CollectionFileObjectNumberId(500_000).Create();
-        Assert.That(actual: idNumber, Is.EqualTo("0500000"));
+        List<string> actualFileObjectNames = CustomFileCollection.RetrieveFileObjectNames(
+                alias: "Document", source: "file.md", count: 5);
+
+        List<string> expectedFileObjectNames = new ()
+        {
+            "Document_0000001.md",
+            "Document_0000002.md",
+            "Document_0000003.md",
+            "Document_0000004.md",
+            "Document_0000005.md",
+        };
+
+        Assert.That(actual: actualFileObjectNames, expression: Is.EqualTo(expectedFileObjectNames));
     }
 
     /// <summary>
-    /// Tests creating file object's name when using a number from the Level #2.
-    /// This range contains integers more than 10_000 and less than 100_000.
+    /// Tests retrieving names of file objects by collection's alias, source, and count.
+    /// This test method is intended to demonstrate more possible examples of the test.
     /// </summary>
     [Test]
-    public void GetIdNumber_WhenValueLevel2()
+    public void RetrieveFileObjectNamesTestCase_2()
     {
-        string idNumber = new CollectionFileObjectNumberId(50_000).Create();
-        Assert.That(actual: idNumber, Is.EqualTo("0050000"));
-    }
+        Assert.Multiple(() =>
+        {
+            Assert.That(
+            actual: CustomFileCollection.RetrieveFileObjectNames(
+                alias: "TextFile", source: "file.txt", count: 2),
+            expression: Is.EqualTo(new List<string>()
+            {
+                "TextFile_0000001.txt",
+                "TextFile_0000002.txt",
+            }));
 
-    /// <summary>
-    /// Tests creating file object's name when using a number from the Level #3.
-    /// This range contains integers more than 1000 and less than 10_000.
-    /// </summary>
-    [Test]
-    public void GetIdNumber_WhenValueLevel3()
-    {
-        string idNumber = new CollectionFileObjectNumberId(5_000).Create();
-        Assert.That(actual: idNumber, Is.EqualTo("0005000"));
-    }
+            Assert.That(
+                actual: CustomFileCollection.RetrieveFileObjectNames(
+                    alias: "SourceCode", source: "source.cs", count: 4),
+                expression: Is.EqualTo(new List<string>()
+                {
+                    "SourceCode_0000001.cs",
+                    "SourceCode_0000002.cs",
+                    "SourceCode_0000003.cs",
+                    "SourceCode_0000004.cs",
+                }));
 
-    /// <summary>
-    /// Tests creating file object's name when using a number from the Level #4.
-    /// This range contains integers more than 100 and less than 1000.
-    /// </summary>
-    [Test]
-    public void GetIdNumber_WhenValueLevel4()
-    {
-        string idNumber = new CollectionFileObjectNumberId(500).Create();
-        Assert.That(actual: idNumber, Is.EqualTo("0000500"));
-    }
+            Assert.That(
+                actual: CustomFileCollection.RetrieveFileObjectNames(
+                    alias: "WebPage", source: "index.html", count: 6),
+                expression: Is.EqualTo(new List<string>()
+                {
+                    "WebPage_0000001.html",
+                    "WebPage_0000002.html",
+                    "WebPage_0000003.html",
+                    "WebPage_0000004.html",
+                    "WebPage_0000005.html",
+                    "WebPage_0000006.html",
+                }));
 
-    /// <summary>
-    /// Tests creating file object's name when using a number from the Level #5.
-    /// This range contains integers more than 10 and less than 100.
-    /// </summary>
-    [Test]
-    public void GetIdNumber_WhenValueLevel5()
-    {
-        string idNumber = new CollectionFileObjectNumberId(50).Create();
-        Assert.That(actual: idNumber, Is.EqualTo("0000050"));
-    }
-
-    /// <summary>
-    /// Tests creating file object's name when using a number from the Level #6.
-    /// This range contains integers more than 0 and less than 10.
-    /// </summary>
-    [Test]
-    public void GetIdNumber_WhenValueLevel6()
-    {
-        string idNumber = new CollectionFileObjectNumberId(5).Create();
-        Assert.That(actual: idNumber, Is.EqualTo("0000005"));
-    }
-
-    /// <summary>
-    /// Tests creating file object's name when using the maximum available number.
-    /// </summary>
-    [Test]
-    public void GetIdNumber_WhenMaximumAvailableValue()
-    {
-        string idNumber = new CollectionFileObjectNumberId(999_999).Create();
-        Assert.That(actual: idNumber, Is.EqualTo("0999999"));
-    }
-
-    /// <summary>
-    /// Tests creating file object's name when using the minimum available number.
-    /// </summary>
-    [Test]
-    public void GetIdNumber_WhenMinimumAvailableValue()
-    {
-        string idNumber = new CollectionFileObjectNumberId(0).Create();
-        Assert.That(actual: idNumber, Is.EqualTo("0000000"));
+            Assert.That(
+                actual: CustomFileCollection.RetrieveFileObjectNames(
+                    alias: "Image", source: "index.png", count: 8),
+                expression: Is.EqualTo(new List<string>()
+                {
+                    "Image_0000001.png",
+                    "Image_0000002.png",
+                    "Image_0000003.png",
+                    "Image_0000004.png",
+                    "Image_0000005.png",
+                    "Image_0000006.png",
+                    "Image_0000007.png",
+                    "Image_0000008.png",
+                }));
+        });
     }
 }
