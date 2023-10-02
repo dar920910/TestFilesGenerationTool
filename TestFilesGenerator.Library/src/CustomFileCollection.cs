@@ -29,7 +29,7 @@ public class CustomFileCollection
     /// <param name="isRandom">Generate file objects with random names if 'true' else use both an alias and a count.</param>
     /// <param name="randomLength">User-defined length of random names for file objects int the collection.</param>
     public CustomFileCollection(
-        string alias, string source, uint count, bool isRandom, byte randomLength)
+        string alias, string source, uint count, bool isRandom = false, byte randomLength = 0)
     {
         this.Alias = alias;
         this.SourceFileObject = source;

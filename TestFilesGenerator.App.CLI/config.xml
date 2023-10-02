@@ -1,6 +1,0 @@
-﻿<?xml version="1.0"?>
-<ArrayOfCustomFileCollection xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
-  <CustomFileCollection Alias="demo1" SourceFileObject="./src/file1.txt" CountOfIDs="10" RandomMode="true" RandomLength="64"/>
-  <CustomFileCollection Alias="demo2" SourceFileObject="./src/file2.txt" CountOfIDs="20" RandomMode="true" RandomLength="32"/>
-  <CustomFileCollection Alias="demo3" SourceFileObject="./src/file3.txt" CountOfIDs="30" RandomMode="true" RandomLength="16"/>
-</ArrayOfCustomFileCollection>

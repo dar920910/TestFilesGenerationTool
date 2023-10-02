@@ -14,26 +14,24 @@ using System.Xml.Serialization;
 /// </summary>
 public class CustomFileStorage
 {
-    private static readonly string StorageOutputDirectory;
+    private const string ConfigTemplateFileName = "config.xml";
+    private const string SourceTemplateFileName = "source.txt";
+    private const string StorageHomeFolderName = "storage";
+    private const string StorageOutputFolderName = "out";
+
+    private static readonly string StorageHomeDirectory;
     private static readonly string StorageConfiguration;
+    private static readonly string StorageOutputDirectory;
 
     /// <summary>
     /// Initializes static members of the <see cref="CustomFileStorage"/> class.
     /// </summary>
     static CustomFileStorage()
     {
-        StorageOutputDirectory = Path.Combine(Directory.GetCurrentDirectory(), "out");
-        StorageConfiguration = Path.Combine(Directory.GetCurrentDirectory(), "config.xml");
+        StorageHomeDirectory = CreateStorageDirectoryByDefault();
 
-        if (!Directory.Exists(StorageOutputDirectory))
-        {
-            Directory.CreateDirectory(StorageOutputDirectory);
-        }
-
-        if (Directory.GetDirectories(StorageOutputDirectory).Length > 0)
-        {
-            Directory.Delete(path: StorageOutputDirectory, recursive: true);
-        }
+        StorageConfiguration = CreateConfigurationFileByDefault(StorageHomeDirectory);
+        StorageOutputDirectory = CreateOutputDirectoryByDefault(StorageHomeDirectory);
 
         CurrentFileObjects = new List<string>();
         TotalSizeOfIDs = 0;
@@ -154,6 +152,66 @@ public class CustomFileStorage
         result.SaveInfoAboutAllFileObjects(countOfDeletedIDs);
 
         return result;
+    }
+
+    private static string CreateStorageDirectoryByDefault()
+    {
+        string storageDirectory = Path.Combine(Directory.GetCurrentDirectory(), StorageHomeFolderName);
+
+        if (Directory.Exists(storageDirectory) is false)
+        {
+            Directory.CreateDirectory(storageDirectory);
+        }
+
+        return storageDirectory;
+    }
+
+    private static string CreateConfigurationFileByDefault(string storageDirectory)
+    {
+        string configFilePath = Path.Combine(storageDirectory, ConfigTemplateFileName);
+
+        if (File.Exists(configFilePath) is false)
+        {
+            string sourceFilePath = Path.Combine(storageDirectory, SourceTemplateFileName);
+
+            if (File.Exists(sourceFilePath) is false)
+            {
+                File.CreateText(sourceFilePath);
+            }
+
+            XmlSerializer serializer = new (typeof(CustomFileCollection[]));
+            using FileStream stream = File.Open(configFilePath, FileMode.CreateNew);
+
+            CustomFileCollection[] collections =
+            {
+                new (alias: "CustomCollection1", source: sourceFilePath, count: 15),
+                new (alias: "CustomCollection2", source: sourceFilePath, count: 30),
+                new (alias: "CustomCollection3", source: sourceFilePath, count: 45),
+                new (alias: "RandomCollection3", source: sourceFilePath, count: 20, isRandom: true, randomLength: 32),
+                new (alias: "RandomCollection4", source: sourceFilePath, count: 40, isRandom: true, randomLength: 64),
+            };
+
+            serializer.Serialize(stream, collections);
+        }
+
+        return configFilePath;
+    }
+
+    private static string CreateOutputDirectoryByDefault(string storageDirectory)
+    {
+        string outputDirectory = Path.Combine(storageDirectory, StorageOutputFolderName);
+
+        if (Directory.Exists(outputDirectory) is false)
+        {
+            Directory.CreateDirectory(outputDirectory);
+        }
+
+        if (Directory.GetDirectories(outputDirectory).Length > 0)
+        {
+            Directory.Delete(path: outputDirectory, recursive: true);
+        }
+
+        return outputDirectory;
     }
 
     private static char RetrieveDiskName(CustomFileObject targetFileObject)
