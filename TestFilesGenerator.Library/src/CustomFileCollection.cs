@@ -26,23 +26,23 @@ public class CustomFileCollection
     /// <param name="alias">User-defined name of the custom collection.</param>
     /// <param name="source">User-defined file template of file objects in the collection.</param>
     /// <param name="count">User-defined count of file objects to be cloned from the file template in the collection.</param>
-    /// <param name="isRandom">Generate file objects with random names if 'true' else use both an alias and a count.</param>
-    /// <param name="randomLength">User-defined length of random names for file objects int the collection.</param>
+    /// <param name="hasRandomFileNames">Generate file objects with random names if 'true' else use both an alias and a count.</param>
+    /// <param name="randomFileNameLength">User-defined length of random names for file objects int the collection.</param>
     public CustomFileCollection(
-        string alias, string source, uint count, bool isRandom = false, byte randomLength = 0)
+        string alias, string source, uint count, bool hasRandomFileNames = false, byte randomFileNameLength = 0)
     {
-        this.Alias = alias;
+        this.Name = alias;
         this.SourceFileObject = source;
-        this.CountOfObjects = count;
-        this.IsRandom = isRandom;
-        this.RandomLength = randomLength;
+        this.CountOfFileObjects = count;
+        this.HasRandomFileNames = hasRandomFileNames;
+        this.RandomFileNameLength = randomFileNameLength;
     }
 
     /// <summary>
     /// Gets or sets the user-defined name of a custom file collection.
     /// </summary>
-    [XmlAttribute("Alias")]
-    public string Alias { get; set; }
+    [XmlAttribute("Name")]
+    public string Name { get; set; }
 
     /// <summary>
     /// Gets or sets the file path as the template for file objects in the collection.
@@ -53,20 +53,20 @@ public class CustomFileCollection
     /// <summary>
     /// Gets or sets the count of file objects to be created in the collection.
     /// </summary>
-    [XmlAttribute("CountOfIDs")]
-    public uint CountOfObjects { get; set; }
+    [XmlAttribute("CountOfFileObjects")]
+    public uint CountOfFileObjects { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether random names should be assigned to file objects in the collection.
     /// </summary>
-    [XmlAttribute("RandomMode")]
-    public bool IsRandom { get; set; }
+    [XmlAttribute("HasRandomFileNames")]
+    public bool HasRandomFileNames { get; set; }
 
     /// <summary>
     /// Gets or sets the fixed length of random names for all file objects in the collection.
     /// </summary>
-    [XmlAttribute("RandomLength")]
-    public byte RandomLength { get; set; }
+    [XmlAttribute("RandomFileNameLength")]
+    public byte RandomFileNameLength { get; set; }
 
     /// <summary>
     /// Retrieves names of possible file objects by collection's parameters.
@@ -112,11 +112,11 @@ public class CustomFileCollection
 
     private CustomFileObject[] GenerateFileObjects()
     {
-        var arrayOfFileObjects = new CustomFileObject[this.CountOfObjects];
+        var arrayOfFileObjects = new CustomFileObject[this.CountOfFileObjects];
 
         for (uint idCounter = 0; idCounter < arrayOfFileObjects.Length; idCounter++)
         {
-            string fileName = this.IsRandom ? this.GenerateRandomIdName() : GenerateCustomIdName(this.Alias, this.SourceFileObject, idCounter + 1);
+            string fileName = this.HasRandomFileNames ? this.GenerateRandomIdName() : GenerateCustomIdName(this.Name, this.SourceFileObject, idCounter + 1);
             string filePath = this.GenerateTargetIdPath(fileName);
             arrayOfFileObjects[idCounter] = new CustomFileObject(filePath, this.SourceFileObject);
         }
@@ -126,13 +126,13 @@ public class CustomFileCollection
 
     private string GenerateTargetIdPath(string targetIdName)
     {
-        string targetDirectory = CustomFileStorage.GetCustomFileCollectionDirectory(this.Alias);
+        string targetDirectory = CustomFileStorage.GetCustomFileCollectionDirectory(this.Name);
         return Path.Combine(targetDirectory, targetIdName);
     }
 
     private string GenerateRandomIdName()
     {
-        return new RandomFileObjectName(this.RandomLength).Create() + GetFileExtensionFromSource(this.SourceFileObject);
+        return new RandomFileObjectName(this.RandomFileNameLength).Create() + GetFileExtensionFromSource(this.SourceFileObject);
     }
 }
 

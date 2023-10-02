@@ -97,7 +97,7 @@ public class CustomFileStorage
     /// <summary>
     /// Gets the directory path for a custom file collection via its alias.
     /// </summary>
-    /// <param name="collectionAlias">Alias of a custom file collection.</param>
+    /// <param name="collectionAlias">Name of a custom file collection.</param>
     /// <returns>Directory path for the custom file collection.</returns>
     public static string GetCustomFileCollectionDirectory(string collectionAlias)
     {
@@ -184,11 +184,13 @@ public class CustomFileStorage
 
             CustomFileCollection[] collections =
             {
-                new (alias: "CustomCollection1", source: sourceFilePath, count: 15),
-                new (alias: "CustomCollection2", source: sourceFilePath, count: 30),
-                new (alias: "CustomCollection3", source: sourceFilePath, count: 45),
-                new (alias: "RandomCollection3", source: sourceFilePath, count: 20, isRandom: true, randomLength: 32),
-                new (alias: "RandomCollection4", source: sourceFilePath, count: 40, isRandom: true, randomLength: 64),
+                new (alias: "CustomCollection1", source: sourceFilePath, count: 5),
+                new (alias: "CustomCollection2", source: sourceFilePath, count: 10),
+                new (alias: "CustomCollection3", source: sourceFilePath, count: 15),
+
+                new (alias: "RandomCollection1", source: sourceFilePath, count: 5, hasRandomFileNames: true, randomFileNameLength: 16),
+                new (alias: "RandomCollection2", source: sourceFilePath, count: 10, hasRandomFileNames: true, randomFileNameLength: 32),
+                new (alias: "RandomCollection3", source: sourceFilePath, count: 15, hasRandomFileNames: true, randomFileNameLength: 64),
             };
 
             serializer.Serialize(stream, collections);
